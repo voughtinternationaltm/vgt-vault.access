@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 550 393"
+     role="img"
+     aria-label="Vought International logo">
+
+  <title>Vought International</title>
+
+  <path
+    fill="#CDCDCD"
+    d="M23 26H158L258 219L194 343L23 26Z"
+  />
+
+  <path
+    fill="#CDCDCD"
+    d="M195 26H531L347 379H214L364 95H230L195 26Z"
+  />
+
+</svg>
