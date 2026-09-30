@@ -1,110 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#050505">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vought International</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main id="app" aria-live="polite">
-    <section id="boot-screen" class="screen screen--center">
-      <div class="boot-brand" aria-label="Vought International">
-        <img class="boot-mark" src="vought_international.svg" alt="">
-        <div class="boot-wordmark">
-          <span>VOUGHT</span>
-          <small>INTERNATIONAL</small>
+  <main id="app">
+    <section id="boot-screen" class="screen boot-screen" aria-label="Vought International">
+      <div class="boot-logo-wrap">
+        <div class="logo-mark logo-mark--boot" aria-hidden="true">
+          <svg viewBox="0 0 550 393" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path fill="currentColor" d="M23 26H158L258 219L194 343L23 26Z" />
+            <path fill="currentColor" d="M195 26H531L347 379H214L364 95H230L195 26Z" />
+          </svg>
+        </div>
+        <div class="wordmark" aria-label="Vought International">
+          <div class="wordmark-main">VOUGHT</div>
+          <div class="wordmark-sub">INTERNATIONAL</div>
         </div>
       </div>
     </section>
 
-    <section id="security-screen" class="screen security-screen is-hidden">
-      <div class="security-mark" aria-hidden="true">
-        <img src="vought_international.svg" alt="Vought International">
+    <section id="security-screen" class="screen security-screen is-hidden" aria-label="Security code">
+      <div class="security-watermark" aria-hidden="true">
+        <svg viewBox="0 0 550 393" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <path fill="currentColor" d="M23 26H158L258 219L194 343L23 26Z" />
+          <path fill="currentColor" d="M195 26H531L347 379H214L364 95H230L195 26Z" />
+        </svg>
       </div>
-      <form id="security-form" class="security-card" autocomplete="off">
+
+      <form id="security-form" class="security-form" autocomplete="off">
         <label for="security-code">Security Code</label>
-        <div class="security-input-wrap">
-          <input id="security-code" name="security-code" inputmode="text" spellcheck="false" aria-describedby="security-status">
-        </div>
-        <div id="security-status" class="security-status" role="status"></div>
+        <input id="security-code" name="security-code" type="text" inputmode="text" spellcheck="false" />
+        <div id="security-status" class="security-status" aria-live="polite"></div>
       </form>
     </section>
 
-    <section id="welcome-screen" class="screen screen--center is-hidden">
-      <div id="welcome-copy" class="welcome-copy" aria-label="Welcome, Fonzi_"></div>
+    <section id="welcome-screen" class="screen welcome-screen is-hidden" aria-label="Welcome">
+      <div id="welcome-text" class="welcome-text" aria-live="polite"></div>
     </section>
 
-    <section id="dashboard" class="dashboard is-hidden">
-      <header class="topbar">
-        <button id="menu-button" class="icon-button" type="button" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-        <button id="brand-button" class="brand-button" type="button" aria-label="Go to home">
-          <img src="assets/v-mark.svg" alt="">
-          <span class="brand-wordmark"><strong>VOUGHT</strong><small>INTERNATIONAL</small></span>
-        </button>
-        <nav class="topnav" aria-label="Primary">
-          <button class="nav-link is-active" type="button" data-section="home">Home</button>
-          <button class="nav-link" type="button" data-section="mission">Mission</button>
-          <button class="nav-link" type="button" data-section="document">Document</button>
+    <section id="main-screen" class="screen main-screen is-hidden" aria-label="Vought dashboard">
+      <aside id="sidebar" class="sidebar" aria-label="Sidebar navigation">
+        <nav class="sidebar-nav">
+          <button class="sidebar-link" data-view="home" type="button">Home</button>
+          <button class="sidebar-link" data-view="mission" type="button">Mission</button>
+          <button class="sidebar-link" data-view="document" type="button">Document</button>
         </nav>
-      </header>
-
-      <div id="drawer-backdrop" class="drawer-backdrop"></div>
-      <aside id="drawer" class="drawer" aria-label="Menu">
-        <nav class="drawer-nav">
-          <button type="button" data-section="home">Home</button>
-          <button type="button" data-section="mission">Mission</button>
-          <button type="button" data-section="document">Document</button>
-        </nav>
-        <button id="logout-button" class="logout-button" type="button">
-          <span class="logout-glyph" aria-hidden="true">↪</span>
-          <span>Logout</span>
+        <button id="logout-button" class="logout-button" type="button" aria-label="Logout">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M9 4H5.75A1.75 1.75 0 0 0 4 5.75v12.5C4 19.216 4.784 20 5.75 20H9" />
+            <path d="M14 7l5 5-5 5" />
+            <path d="M19 12H9" />
+          </svg>
         </button>
       </aside>
 
-      <div class="dashboard-content">
-        <section id="section-home" class="content-section is-visible">
-          <div class="section-title">Recently</div>
-          <div class="empty-state">Open a file to start</div>
+      <div class="page-shell">
+        <header class="topbar">
+          <button id="menu-button" class="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
 
-          <div class="section-title section-title--documents">Document</div>
-          <div class="document-grid">
-            <button class="document-card" type="button" data-document="Welcome, Fonzi">
-              <span class="document-thumb"></span>
-              <span class="document-name">Welcome, Fonzi</span>
-            </button>
-            <button class="document-card" type="button" data-document="Subject's Personnel Profile">
-              <span class="document-thumb"></span>
-              <span class="document-name">Subject's Personnel Profile</span>
-            </button>
-            <button class="document-card" type="button" data-document="My Personnel Profile">
-              <span class="document-thumb"></span>
-              <span class="document-name">My Personnel Profile</span>
-            </button>
-          </div>
-        </section>
-
-        <section id="section-mission" class="content-section">
-          <div class="section-title">Mission</div>
-          <div class="mission-space"></div>
-        </section>
-
-        <section id="section-document" class="content-section">
-          <div class="section-title">Document</div>
-          <div class="document-preview-layout">
-            <div class="document-preview-card">
-              <span class="document-thumb document-thumb--large"></span>
-              <div id="selected-document-title" class="document-preview-title is-selected">Welcome, Fonzi</div>
+          <div class="header-brand" aria-label="Vought International">
+            <div class="logo-mark logo-mark--header" aria-hidden="true">
+              <svg viewBox="0 0 550 393" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                <path fill="currentColor" d="M23 26H158L258 219L194 343L23 26Z" />
+                <path fill="currentColor" d="M195 26H531L347 379H214L364 95H230L195 26Z" />
+              </svg>
             </div>
-            <div class="document-preview-label">Preview</div>
+            <div class="header-wordmark">
+              <div class="header-wordmark-main">VOUGHT</div>
+              <div class="header-wordmark-sub">INTERNATIONAL</div>
+            </div>
           </div>
-        </section>
+
+          <nav class="topnav" aria-label="Primary navigation">
+            <button class="topnav-link is-active" data-view="home" type="button">Home</button>
+            <button class="topnav-link" data-view="mission" type="button">Mission</button>
+            <button class="topnav-link" data-view="document" type="button">Document</button>
+          </nav>
+        </header>
+
+        <div id="page-content" class="page-content"></div>
       </div>
     </section>
   </main>
