@@ -1,5 +1,17 @@
+const PORTALS = {
+  "VGT-FNZ-4798": {
+    name: "Fonzi",
+    welcome: "Welcome, Fonzi",
+  },
+  "VGT-SHN-2108": {
+    name: "Shu",
+    welcome: "Welcome, Shu",
+  },
+};
+
 const APP = {
-  validCode: "VGT-FNZ-4798",
+  activeCode: null,
+  portal: PORTALS["VGT-FNZ-4798"],
   currentView: "home",
   selectedDocument: null,
   welcomeTypingTimer: null,
@@ -68,7 +80,7 @@ function typeWelcome() {
   clearWelcomeTimers();
   showScreen(screens.welcome);
 
-  const target = "Welcome, Fonzi";
+  const target = APP.portal.welcome;
   let index = 0;
 
   welcomeCopy.textContent = "";
@@ -123,6 +135,8 @@ function renderView(view) {
   APP.currentView = view;
   setActiveNavigation(view);
 
+  const portalName = APP.portal.name;
+
   if (view === "home") {
     pageContent.innerHTML = `
       <section class="home-page fade-in">
@@ -136,7 +150,7 @@ function renderView(view) {
           <h2 class="page-title">Document</h2>
 
           <div class="documents-grid">
-            ${documentCard("welcome", "Welcome, Fonzi")}
+            ${documentCard("welcome", `Welcome, ${portalName}`)}
             ${documentCard("subject", "Subject's Personnel Profile")}
             ${documentCard("personnel", "My Personnel Profile")}
           </div>
@@ -156,7 +170,7 @@ function renderView(view) {
         <div class="document-view">
           <div class="document-preview-large" aria-hidden="true"></div>
           <button class="document-file-title" type="button" data-open-document="welcome">
-            Welcome, Fonzi
+            Welcome, ${portalName}
           </button>
         </div>
       </section>
@@ -167,7 +181,6 @@ function renderView(view) {
     openButton.addEventListener("click", () => {
       APP.selectedDocument = "welcome";
       openButton.classList.add("is-selected");
-      openButton.closest(".document-view")?.classList.add("is-selected");
     });
 
     return;
@@ -220,7 +233,8 @@ securityForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const code = securityInput.value.trim().toUpperCase();
-  const isValid = code === APP.validCode;
+  const portal = PORTALS[code];
+  const isValid = Boolean(portal);
 
   securityStatus.className = "security-status";
 
@@ -229,6 +243,10 @@ securityForm.addEventListener("submit", (event) => {
     securityStatus.classList.add("error");
     return;
   }
+
+  APP.activeCode = code;
+  APP.portal = portal;
+  APP.selectedDocument = null;
 
   securityStatus.textContent = "Authorized";
   securityStatus.classList.add("success");
