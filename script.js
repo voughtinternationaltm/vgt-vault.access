@@ -2,6 +2,10 @@ const APP = {
   validCode: "VGT-FNZ-4798",
   currentView: "home",
   selectedDocument: null,
+  welcomeTypingTimer: null,
+  welcomeEraseTimer: null,
+  welcomeEraseDelay: null,
+  bootExitTimer: null,
 };
 
 const screens = {
@@ -14,11 +18,13 @@ const screens = {
 const securityForm = document.getElementById("security-form");
 const securityInput = document.getElementById("security-code");
 const securityStatus = document.getElementById("security-status");
-const welcomeText = document.getElementById("welcome-text");
+const welcomeCopy = document.getElementById("welcome-copy");
+const welcomeCursor = document.getElementById("welcome-cursor");
 const pageContent = document.getElementById("page-content");
 const menuButton = document.getElementById("menu-button");
 const logoutButton = document.getElementById("logout-button");
 const sidebar = document.getElementById("sidebar");
+const sidebarBackdrop = document.getElementById("sidebar-backdrop");
 
 const allNavigationButtons = () => [
   ...document.querySelectorAll("[data-view]"),
@@ -30,66 +36,85 @@ function showScreen(screen) {
 }
 
 function beginSecurity() {
+  clearWelcomeTimers();
+  clearTimeout(APP.bootExitTimer);
+  screens.boot.classList.remove("is-leaving");
   securityStatus.textContent = "";
   securityStatus.className = "security-status";
   securityInput.value = "";
   showScreen(screens.security);
-  window.setTimeout(() => securityInput.focus(), 80);
+  window.setTimeout(() => securityInput.focus(), 100);
+}
+
+function startBootSequence() {
+  clearTimeout(APP.bootExitTimer);
+
+  APP.bootExitTimer = window.setTimeout(() => {
+    screens.boot.classList.add("is-leaving");
+
+    window.setTimeout(() => {
+      beginSecurity();
+    }, 1250);
+  }, 4600);
+}
+
+function clearWelcomeTimers() {
+  window.clearInterval(APP.welcomeTypingTimer);
+  window.clearInterval(APP.welcomeEraseTimer);
+  window.clearTimeout(APP.welcomeEraseDelay);
 }
 
 function typeWelcome() {
+  clearWelcomeTimers();
   showScreen(screens.welcome);
 
-  const target = "Welcome, Fonzi_";
+  const target = "Welcome, Fonzi";
   let index = 0;
 
-  welcomeText.textContent = "";
+  welcomeCopy.textContent = "";
+  welcomeCursor.style.visibility = "visible";
 
-  const typeTimer = window.setInterval(() => {
-    welcomeText.textContent = target.slice(0, index + 1);
+  APP.welcomeTypingTimer = window.setInterval(() => {
+    welcomeCopy.textContent = target.slice(0, index + 1);
     index += 1;
 
     if (index >= target.length) {
-      window.clearInterval(typeTimer);
-      window.setTimeout(() => eraseWelcome(target), 5000);
+      window.clearInterval(APP.welcomeTypingTimer);
+
+      APP.welcomeEraseDelay = window.setTimeout(() => {
+        eraseWelcome(target);
+      }, 5000);
     }
-  }, 70);
+  }, 92);
 }
 
 function eraseWelcome(target) {
+  window.clearInterval(APP.welcomeEraseTimer);
   let index = target.length;
 
-  const eraseTimer = window.setInterval(() => {
+  APP.welcomeEraseTimer = window.setInterval(() => {
     index -= 1;
-    welcomeText.textContent = target.slice(0, index);
+    welcomeCopy.textContent = target.slice(0, index);
 
     if (index <= 0) {
-      window.clearInterval(eraseTimer);
+      window.clearInterval(APP.welcomeEraseTimer);
+      welcomeCursor.style.visibility = "hidden";
+
       window.setTimeout(() => {
         openMainScreen();
-      }, 220);
+      }, 450);
     }
-  }, 45);
+  }, 120);
 }
 
 function openMainScreen() {
   showScreen(screens.main);
-  sidebar.classList.remove("is-open");
-  document.body.classList.remove("sidebar-open");
-  menuButton.setAttribute("aria-expanded", "false");
+  toggleSidebar(false);
   renderView(APP.currentView);
 }
 
 function setActiveNavigation(view) {
-  allNavigationButtons().forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.view === view);
-  });
-
-  document.querySelectorAll(".topnav-link").forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.view === view);
-  });
-
-  document.querySelectorAll(".sidebar-link").forEach((button) => {
+  document.querySelectorAll(".topnav-link, .sidebar-link").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.view === view);
   });
 }
@@ -102,12 +127,14 @@ function renderView(view) {
     pageContent.innerHTML = `
       <section class="home-page fade-in">
         <h1 class="page-title">Recently</h1>
+
         <section class="recently" aria-label="Recently opened documents">
           <div class="empty-state">Open a file to start</div>
         </section>
 
         <section class="documents-section" aria-label="Documents">
           <h2 class="page-title">Document</h2>
+
           <div class="documents-grid">
             ${documentCard("welcome", "Welcome, Fonzi")}
             ${documentCard("subject", "Subject's Personnel Profile")}
@@ -125,6 +152,7 @@ function renderView(view) {
     pageContent.innerHTML = `
       <section class="document-page fade-in">
         <h1 class="page-title">Document</h1>
+
         <div class="document-view">
           <div class="document-preview-large" aria-hidden="true"></div>
           <button class="document-file-title" type="button" data-open-document="welcome">
@@ -135,10 +163,12 @@ function renderView(view) {
     `;
 
     const openButton = pageContent.querySelector("[data-open-document='welcome']");
+
     openButton.addEventListener("click", () => {
       APP.selectedDocument = "welcome";
       openButton.classList.add("is-selected");
     });
+
     return;
   }
 
@@ -164,11 +194,25 @@ function bindDocumentCards() {
   document.querySelectorAll("[data-document-id]").forEach((card) => {
     card.addEventListener("click", () => {
       APP.selectedDocument = card.dataset.documentId;
+
       document.querySelectorAll(".document-card").forEach((item) => {
         item.classList.toggle("is-selected", item === card);
       });
     });
   });
+}
+
+function toggleSidebar(force) {
+  const shouldOpen = typeof force === "boolean"
+    ? force
+    : !sidebar.classList.contains("is-open");
+
+  sidebar.classList.toggle("is-open", shouldOpen);
+  sidebarBackdrop.classList.toggle("is-visible", shouldOpen);
+  document.body.classList.toggle("sidebar-open", shouldOpen);
+  sidebar.setAttribute("aria-hidden", String(!shouldOpen));
+  menuButton.setAttribute("aria-expanded", String(shouldOpen));
+  menuButton.setAttribute("aria-label", shouldOpen ? "Close menu" : "Open menu");
 }
 
 securityForm.addEventListener("submit", (event) => {
@@ -190,7 +234,7 @@ securityForm.addEventListener("submit", (event) => {
 
   window.setTimeout(() => {
     typeWelcome();
-  }, 900);
+  }, 1100);
 });
 
 securityInput.addEventListener("input", () => {
@@ -201,22 +245,16 @@ securityInput.addEventListener("input", () => {
 allNavigationButtons().forEach((button) => {
   button.addEventListener("click", () => {
     renderView(button.dataset.view);
-
-    if (sidebar.classList.contains("is-open")) {
-      toggleSidebar(false);
-    }
+    toggleSidebar(false);
   });
 });
 
-function toggleSidebar(force) {
-  const shouldOpen = typeof force === "boolean" ? force : !sidebar.classList.contains("is-open");
-  sidebar.classList.toggle("is-open", shouldOpen);
-  document.body.classList.toggle("sidebar-open", shouldOpen);
-  menuButton.setAttribute("aria-expanded", String(shouldOpen));
-}
-
 menuButton.addEventListener("click", () => {
   toggleSidebar();
+});
+
+sidebarBackdrop.addEventListener("click", () => {
+  toggleSidebar(false);
 });
 
 logoutButton.addEventListener("click", () => {
@@ -230,6 +268,5 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-window.setTimeout(() => {
-  beginSecurity();
-}, 1400);
+renderView(APP.currentView);
+startBootSequence();
