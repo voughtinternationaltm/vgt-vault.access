@@ -167,6 +167,7 @@ function renderView(view) {
     openButton.addEventListener("click", () => {
       APP.selectedDocument = "welcome";
       openButton.classList.add("is-selected");
+      openButton.closest(".document-view")?.classList.add("is-selected");
     });
 
     return;
