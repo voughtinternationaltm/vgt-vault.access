@@ -453,10 +453,12 @@ body.sidebar-open .menu-button span:nth-child(3) {
 }
 
 .recently-grid {
-  width: min(430px, 100%);
+  width: 100%;
+  max-width: 1180px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 52px);
+  align-items: start;
 }
 
 .recently-card {
@@ -517,6 +519,11 @@ body.sidebar-open .menu-button span:nth-child(3) {
   object-fit: cover;
   object-position: top center;
   filter: brightness(0.84);
+}
+
+.document-preview--welcome-note img {
+  object-fit: cover;
+  object-position: top center;
 }
 
 .document-preview--welcome {
@@ -854,6 +861,11 @@ body.document-modal-open {
     min-height: 240px;
   }
 
+  .recently-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
   .documents-grid {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -861,6 +873,10 @@ body.document-modal-open {
 }
 
 @media (max-width: 560px) {
+  .recently-grid {
+    grid-template-columns: 1fr;
+  }
+
   .document-modal-panel {
     width: 100vw;
     height: 100vh;
