@@ -119,6 +119,33 @@
         <div id="page-content" class="page-content"></div>
       </div>
     </section>
+
+    <div id="document-modal" class="document-modal" aria-hidden="true">
+      <div class="document-modal-backdrop" data-close-document></div>
+      <section class="document-modal-panel" role="dialog" aria-modal="true" aria-labelledby="document-modal-title">
+        <header class="document-modal-header">
+          <h2 id="document-modal-title">My Personnel Profile</h2>
+          <div class="document-modal-actions">
+            <a
+              id="document-download"
+              class="document-download"
+              href="personnel-profile-download.pdf"
+              download="Personnel Profile.pdf"
+            >Download</a>
+            <button id="document-close" class="document-close" type="button" aria-label="Close document">×</button>
+          </div>
+        </header>
+        <div class="document-frame-wrap">
+          <iframe
+            id="document-frame"
+            class="document-frame"
+            src="personnel-profile.pdf"
+            title="My Personnel Profile"
+          ></iframe>
+        </div>
+      </section>
+    </div>
+
   </main>
 
   <script src="script.js"></script>
