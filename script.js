@@ -142,6 +142,14 @@ function previewMarkup(id, variant = "card") {
     `;
   }
 
+  if (id === "welcome") {
+    return `
+      <div class="document-preview document-preview--pdf document-preview--welcome-note ${variant === "large" ? "document-preview--large" : ""}">
+        <img src="assets/welcome-note-preview.png" alt="First page preview of Welcome, ${APP.portal.name}" loading="lazy" />
+      </div>
+    `;
+  }
+
   return `
     <div class="document-preview document-preview--welcome ${variant === "large" ? "document-preview--large" : ""}">
       <div class="welcome-preview-copy">${APP.portal.welcome}<span>_</span></div>
@@ -203,8 +211,8 @@ function bindDocumentCards() {
         item.classList.toggle("is-selected", item === card);
       });
 
-      if (id === "personnel" || id === "subject") {
-        openPersonnelProfile(id);
+      if (id === "welcome" || id === "personnel" || id === "subject") {
+        openDocument(id);
       } else {
         recordRecentlyOpened(id);
         renderView(APP.currentView);
@@ -270,16 +278,35 @@ function renderView(view) {
   bindDocumentCards();
 }
 
-function openPersonnelProfile(documentId) {
-  const valid = documentId === profileId();
-  if (!valid) return;
+function openDocument(documentId) {
+  let title = "";
+  let source = "";
+  let downloadName = "";
+  let downloadHref = "";
+
+  if (documentId === "welcome") {
+    title = `Welcome, ${APP.portal.name}`;
+    source = "welcome-note.pdf#page=1&zoom=page-fit";
+    downloadName = `Welcome, ${APP.portal.name}.pdf`;
+    downloadHref = "welcome-note.pdf";
+  } else if (documentId === profileId()) {
+    title = profileTitle();
+    source = "personnel-profile.pdf#page=1&zoom=page-fit";
+    downloadName = "Personnel Profile.pdf";
+    downloadHref = "personnel-profile-download.pdf";
+  } else {
+    return;
+  }
 
   recordRecentlyOpened(documentId);
 
-  document.getElementById("document-modal-title").textContent = profileTitle();
-  document.getElementById("document-frame").title = profileTitle();
-  document.getElementById("document-frame").src = "personnel-profile.pdf#page=1&zoom=page-fit";
-  document.getElementById("document-download").download = "Personnel Profile.pdf";
+  document.getElementById("document-modal-title").textContent = title;
+  document.getElementById("document-frame").title = title;
+  document.getElementById("document-frame").src = source;
+
+  const download = document.getElementById("document-download");
+  download.href = downloadHref;
+  download.download = downloadName;
 
   documentModal.classList.add("is-open");
   documentModal.setAttribute("aria-hidden", "false");
