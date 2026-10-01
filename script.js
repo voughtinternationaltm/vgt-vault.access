@@ -37,6 +37,8 @@ const menuButton = document.getElementById("menu-button");
 const logoutButton = document.getElementById("logout-button");
 const sidebar = document.getElementById("sidebar");
 const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+const documentModal = document.getElementById("document-modal");
+const documentClose = document.getElementById("document-close");
 
 const allNavigationButtons = () => [
   ...document.querySelectorAll("[data-view]"),
@@ -152,7 +154,7 @@ function renderView(view) {
           <div class="documents-grid">
             ${documentCard("welcome", `Welcome, ${portalName}`)}
             ${documentCard("subject", "Subject's Personnel Profile")}
-            ${documentCard("personnel", "My Personnel Profile")}
+            ${documentCard("personnel", "My Personnel Profile", APP.portal.name === "Fonzi")}
           </div>
         </section>
       </section>
@@ -172,15 +174,27 @@ function renderView(view) {
           <button class="document-file-title" type="button" data-open-document="welcome">
             Welcome, ${portalName}
           </button>
+          ${APP.portal.name === "Fonzi" ? `
+            <button class="document-file-title personnel-file-link" type="button" data-open-document="personnel">
+              My Personnel Profile
+            </button>
+          ` : ""}
         </div>
       </section>
     `;
 
-    const openButton = pageContent.querySelector("[data-open-document='welcome']");
+    pageContent.querySelectorAll("[data-open-document]").forEach((openButton) => {
+      openButton.addEventListener("click", () => {
+        const id = openButton.dataset.openDocument;
+        APP.selectedDocument = id;
+        pageContent.querySelectorAll("[data-open-document]").forEach((item) => {
+          item.classList.toggle("is-selected", item === openButton);
+        });
 
-    openButton.addEventListener("click", () => {
-      APP.selectedDocument = "welcome";
-      openButton.classList.add("is-selected");
+        if (id === "personnel") {
+          openPersonnelProfile();
+        }
+      });
     });
 
     return;
@@ -193,14 +207,19 @@ function renderView(view) {
   `;
 }
 
-function documentCard(id, title) {
+function documentCard(id, title, enabled = true) {
   const selected = APP.selectedDocument === id ? "is-selected" : "";
+  const disabled = enabled ? "" : "is-disabled";
+  const tag = enabled ? "button" : "div";
+  const attrs = enabled
+    ? `type="button" data-document-id="${id}"`
+    : `aria-disabled="true"`;
 
   return `
-    <button class="document-card ${selected}" type="button" data-document-id="${id}">
+    <${tag} class="document-card ${selected} ${disabled}" ${attrs}>
       <div class="document-preview" aria-hidden="true"></div>
       <span class="document-title">${title}</span>
-    </button>
+    </${tag}>
   `;
 }
 
@@ -212,8 +231,27 @@ function bindDocumentCards() {
       document.querySelectorAll(".document-card").forEach((item) => {
         item.classList.toggle("is-selected", item === card);
       });
+
+      if (APP.selectedDocument === "personnel") {
+        openPersonnelProfile();
+      }
     });
   });
+}
+
+function openPersonnelProfile() {
+  if (APP.portal.name !== "Fonzi") return;
+
+  documentModal.classList.add("is-open");
+  documentModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("document-modal-open");
+  window.setTimeout(() => documentClose.focus(), 80);
+}
+
+function closePersonnelProfile() {
+  documentModal.classList.remove("is-open");
+  documentModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("document-modal-open");
 }
 
 function toggleSidebar(force) {
@@ -276,14 +314,26 @@ sidebarBackdrop.addEventListener("click", () => {
   toggleSidebar(false);
 });
 
+documentClose.addEventListener("click", closePersonnelProfile);
+documentModal.querySelectorAll("[data-close-document]").forEach((element) => {
+  element.addEventListener("click", closePersonnelProfile);
+});
+
 logoutButton.addEventListener("click", () => {
   toggleSidebar(false);
   beginSecurity();
 });
 
 window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && sidebar.classList.contains("is-open")) {
-    toggleSidebar(false);
+  if (event.key === "Escape") {
+    if (documentModal.classList.contains("is-open")) {
+      closePersonnelProfile();
+      return;
+    }
+
+    if (sidebar.classList.contains("is-open")) {
+      toggleSidebar(false);
+    }
   }
 });
 
