@@ -153,7 +153,7 @@ function renderView(view) {
 
           <div class="documents-grid">
             ${documentCard("welcome", `Welcome, ${portalName}`)}
-            ${documentCard("subject", "Subject's Personnel Profile")}
+            ${documentCard("subject", "Subject's Personnel Profile", APP.portal.name === "Shu")}
             ${documentCard("personnel", "My Personnel Profile", APP.portal.name === "Fonzi")}
           </div>
         </section>
@@ -178,7 +178,11 @@ function renderView(view) {
             <button class="document-file-title personnel-file-link" type="button" data-open-document="personnel">
               My Personnel Profile
             </button>
-          ` : ""}
+          ` : `
+            <button class="document-file-title personnel-file-link" type="button" data-open-document="subject">
+              Subject's Personnel Profile
+            </button>
+          `}
         </div>
       </section>
     `;
@@ -191,8 +195,8 @@ function renderView(view) {
           item.classList.toggle("is-selected", item === openButton);
         });
 
-        if (id === "personnel") {
-          openPersonnelProfile();
+        if (id === "personnel" || id === "subject") {
+          openPersonnelProfile(id);
         }
       });
     });
@@ -232,15 +236,26 @@ function bindDocumentCards() {
         item.classList.toggle("is-selected", item === card);
       });
 
-      if (APP.selectedDocument === "personnel") {
-        openPersonnelProfile();
+      if (APP.selectedDocument === "personnel" || APP.selectedDocument === "subject") {
+        openPersonnelProfile(APP.selectedDocument);
       }
     });
   });
 }
 
-function openPersonnelProfile() {
-  if (APP.portal.name !== "Fonzi") return;
+function openPersonnelProfile(documentId) {
+  const isFonziProfile = APP.portal.name === "Fonzi" && documentId === "personnel";
+  const isShuProfile = APP.portal.name === "Shu" && documentId === "subject";
+
+  if (!isFonziProfile && !isShuProfile) return;
+
+  document.getElementById("document-modal-title").textContent = isFonziProfile
+    ? "My Personnel Profile"
+    : "Subject's Personnel Profile";
+
+  document.getElementById("document-frame").title = isFonziProfile
+    ? "My Personnel Profile"
+    : "Subject's Personnel Profile";
 
   documentModal.classList.add("is-open");
   documentModal.setAttribute("aria-hidden", "false");
