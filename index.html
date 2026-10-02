@@ -65,8 +65,9 @@
       <aside id="sidebar" class="sidebar" aria-label="Sidebar navigation" aria-hidden="true">
         <nav class="sidebar-nav">
           <button class="sidebar-link" data-view="home" type="button">Home</button>
-          <button class="sidebar-link" data-view="mission" type="button">Mission</button>
+          <button class="sidebar-link" data-view="mission" type="button"><span>Mission</span><span class="mission-notification-dot" aria-label="New mission"></span></button>
           <button class="sidebar-link" data-view="document" type="button">Document</button>
+          <button class="sidebar-link" data-view="support" type="button">Support</button>
         </nav>
 
         <button id="logout-button" class="logout-button" type="button">
@@ -111,7 +112,7 @@
 
           <nav class="topnav" aria-label="Primary navigation">
             <button class="topnav-link is-active" data-view="home" type="button">Home</button>
-            <button class="topnav-link" data-view="mission" type="button">Mission</button>
+            <button class="topnav-link" data-view="mission" type="button"><span>Mission</span><span class="mission-notification-dot" aria-label="New mission"></span></button>
             <button class="topnav-link" data-view="document" type="button">Document</button>
           </nav>
         </header>
@@ -146,6 +147,7 @@
       </section>
     </div>
 
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
   </main>
 
   <script src="script.js"></script>
