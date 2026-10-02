@@ -265,6 +265,7 @@ input:focus-visible {
 }
 
 .sidebar-link {
+  position: relative;
   width: 100%;
   color: #d1d1d1;
   text-align: left;
@@ -430,6 +431,28 @@ body.sidebar-open .menu-button span:nth-child(3) {
   transform: scaleX(1);
 }
 
+.mission-notification-dot {
+  display: none;
+  width: 8px;
+  height: 8px;
+  margin-left: 7px;
+  border-radius: 50%;
+  background: #d63838;
+  vertical-align: middle;
+}
+
+.mission-notification-dot.is-visible {
+  display: inline-block;
+}
+
+.sidebar-link .mission-notification-dot {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  margin: 0;
+  transform: translateY(-50%);
+}
+
 .page-content {
   min-height: calc(100vh - 140px);
   padding: 12px 7.5vw 70px 40px;
@@ -472,6 +495,11 @@ body.sidebar-open .menu-button span:nth-child(3) {
 }
 
 .empty-state {
+  width: 100%;
+  min-height: 285px;
+  display: grid;
+  place-items: center;
+  text-align: center;
   font-size: clamp(16px, 1.8vw, 27px);
   color: #d1d1d1;
 }
@@ -952,5 +980,660 @@ body.document-modal-open {
 
   .topnav-link {
     font-size: 16px;
+  }
+}
+
+/* Support */
+.support-page {
+  position: relative;
+  min-height: calc(100vh - 165px);
+  width: 100%;
+}
+
+.support-title-row,
+.support-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.support-title-row {
+  position: relative;
+  min-height: 70px;
+}
+
+.support-compose-button,
+.support-back-button {
+  border: 0;
+  background: transparent;
+  color: #d2d2d2;
+  cursor: pointer;
+}
+
+.support-compose-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #d6d6d6;
+  color: #151515;
+  display: grid;
+  place-items: center;
+  z-index: 8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.support-plus {
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: 27px;
+  font-weight: 300;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.support-compose-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: 66px;
+  white-space: nowrap;
+  padding: 7px 13px;
+  border-radius: 18px;
+  background: #292929;
+  color: #d8d8d8;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(5px);
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.support-compose-button:hover .support-compose-tooltip,
+.support-compose-button:focus-visible .support-compose-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.support-back-button {
+  width: 44px;
+  height: 44px;
+  font-size: 31px;
+  line-height: 1;
+  padding: 0;
+}
+
+.support-list {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 820px;
+}
+
+.support-list-item {
+  position: relative;
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-bottom: 1px solid #363636;
+  background: transparent;
+  color: #d1d1d1;
+  text-align: left;
+  padding: 15px 42px 15px 4px;
+  cursor: pointer;
+  font-size: clamp(15px, 1.4vw, 20px);
+}
+
+.support-list-item:hover .support-list-subject,
+.support-list-item.is-unread .support-list-subject {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.support-unread-dot {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d63838;
+  transform: translateY(-50%);
+}
+
+.support-empty {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: clamp(16px, 1.8vw, 27px);
+  color: #d1d1d1;
+}
+
+.support-message-card {
+  margin-top: 30px;
+  max-width: 900px;
+  border-top: 1px solid #3b3b3b;
+  padding-top: 22px;
+}
+
+.support-message-meta {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 10px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.support-message-meta strong {
+  color: #d2d2d2;
+  font-weight: 500;
+}
+
+.support-message-body {
+  margin-top: 28px;
+  color: #d2d2d2;
+  font-size: 15px;
+  line-height: 1.85;
+  max-width: 900px;
+  white-space: pre-wrap;
+}
+
+/* Full-screen reply view */
+.support-reply-fullscreen {
+  width: calc(100% + 7.5vw + 40px);
+  min-height: calc(100vh - 152px);
+  margin: -12px -7.5vw -70px -40px;
+  border: 1px solid #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.support-reply-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.support-reply-panel {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.support-reply-panel .support-message-meta {
+  margin-bottom: 0;
+}
+
+.support-reply-panel .support-message-meta,
+.support-reply-panel .support-message-body {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.support-reply-panel .support-message-meta {
+  min-height: 58px;
+  align-items: center;
+  margin: 0;
+  border-bottom: 1px solid #d0d0d0;
+  font-size: clamp(16px, 1.45vw, 23px);
+}
+
+.support-reply-panel .support-message-body {
+  max-width: none;
+  padding-top: 18px;
+  padding-bottom: 42px;
+  font-size: clamp(15px, 1.25vw, 19px);
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+/* Full-size send-message view, following the PDF layout. */
+.support-compose {
+  width: 100%;
+  min-height: calc(100vh - 165px);
+  border: 1px solid #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.support-compose-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+  padding: 8px 14px;
+}
+
+.support-compose-head h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.2vw, 38px);
+  font-weight: 500;
+}
+
+.support-form {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.support-field {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #d0d0d0;
+  padding: 0 12px;
+}
+
+.support-field--subject {
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.support-field label,
+.support-field-label {
+  flex: 0 0 auto;
+  color: #d0d0d0;
+  font-size: clamp(18px, 1.7vw, 28px);
+  margin-right: 16px;
+}
+
+.support-field input,
+.support-selected-subject {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: #d0d0d0;
+  font: inherit;
+  font-size: clamp(16px, 1.45vw, 23px);
+  padding: 0;
+}
+
+.support-field input:focus {
+  outline: none;
+}
+
+.support-message-area {
+  flex: 1 1 auto;
+  min-height: 260px;
+  padding: 26px 18px;
+  overflow: auto;
+}
+
+.support-message-body-editor {
+  color: #d0d0d0;
+  font-size: clamp(15px, 1.35vw, 20px);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.support-compose-bottom {
+  flex: 0 0 auto;
+  min-height: 76px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  border-top: 1px solid #d0d0d0;
+}
+
+.support-choice-list {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(22px, 4vw, 62px);
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.support-choice {
+  border: 0;
+  background: transparent;
+  color: #d0d0d0;
+  padding: 8px 0;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: clamp(13px, 1.15vw, 18px);
+}
+
+.support-choice.is-selected {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.support-send-area {
+  flex: 0 0 auto;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 10px 12px;
+}
+
+.support-form-status {
+  min-width: 0;
+  font-size: 13px;
+  text-align: right;
+}
+
+.support-form-status.is-error { color: #d63838; }
+.support-form-status.is-success { color: #69c83b; }
+
+.support-send-button {
+  min-width: 132px;
+  height: 48px;
+  border: 0;
+  background: #d6d6d6;
+  color: #151515;
+  padding: 10px 22px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  font-size: 15px;
+}
+
+.support-send-button:hover,
+.support-back-button:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.toast-container {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast-notification {
+  width: min(360px, calc(100vw - 48px));
+  border: 1px solid #4a4a4a;
+  background: #252525;
+  color: #d2d2d2;
+  padding: 15px 17px;
+  text-align: left;
+  box-shadow: 0 18px 42px rgba(0,0,0,.38);
+  cursor: pointer;
+  pointer-events: auto;
+  animation: toast-in 260ms ease both;
+}
+
+.toast-notification strong,
+.toast-notification span {
+  display: block;
+}
+
+.toast-notification strong {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.toast-notification span {
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 780px) {
+  .support-compose {
+    min-height: calc(100vh - 155px);
+  }
+
+  .support-compose-bottom {
+    flex-direction: column;
+  }
+
+  .support-choice-list {
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .support-send-area {
+    min-width: 0;
+    justify-content: space-between;
+  }
+
+  .support-compose-button {
+    right: 18px;
+    bottom: 18px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .support-reply-fullscreen {
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
+    min-height: calc(100vh - 130px);
+  }
+}
+
+
+/* Mission cards use the same framed preview language as Document cards. */
+.mission-list {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 88px);
+  align-items: start;
+}
+
+.mission-card {
+  position: relative;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mission-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #292929;
+}
+
+.mission-preview-label {
+  color: #8e8e8e;
+  font-size: clamp(12px, 1vw, 15px);
+  letter-spacing: 0.16em;
+}
+
+.mission-preview-title {
+  margin-top: 12px;
+  color: #d2d2d2;
+  font-size: clamp(17px, 1.8vw, 28px);
+  letter-spacing: 0.02em;
+}
+
+.mission-preview-line {
+  width: 48%;
+  height: 1px;
+  margin-top: 18px;
+  background: #5d5d5d;
+}
+
+.mission-card:hover .document-preview {
+  transform: translateY(-4px);
+  background: #303030;
+}
+
+.mission-card.is-unread .document-title {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.mission-unread-dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d63838;
+}
+
+/* Keep the compose control compact and safely inside the viewport corner. */
+.support-compose-button {
+  right: clamp(16px, 2.5vw, 28px);
+  bottom: clamp(16px, 2.5vw, 28px);
+  width: 48px;
+  height: 48px;
+}
+
+.support-plus {
+  font-size: 23px;
+}
+
+/* Reply view: full working area with a small breathing margin around the frame. */
+.support-reply-fullscreen {
+  width: calc(100vw - 36px);
+  min-height: calc(100vh - 200px);
+  margin-left: calc((100vw - 100%) / -2 + 18px);
+  margin-right: 0;
+  margin-top: 6px;
+  margin-bottom: 18px;
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.support-reply-panel {
+  padding: 0 10px 20px;
+}
+
+.support-reply-panel .support-message-body {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+@media (max-width: 780px) {
+  .mission-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .support-compose-button {
+    right: 18px;
+    bottom: 18px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .support-reply-fullscreen {
+    width: calc(100vw - 28px);
+    margin-left: -6px;
+    margin-right: 0;
+    min-height: calc(100vh - 165px);
+  }
+}
+
+@media (max-width: 560px) {
+  .mission-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mission page sections and completed-mission states. */
+.mission-empty {
+  min-height: 285px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: clamp(16px, 1.8vw, 27px);
+  color: #d1d1d1;
+}
+
+.completed-mission-section {
+  margin-top: 28px;
+}
+
+.mission-card--completed .document-preview {
+  opacity: 0.9;
+}
+
+.mission-detail {
+  min-height: calc(100vh - 210px);
+  padding-top: 16px;
+}
+
+.mission-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mission-detail-head h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.2vw, 38px);
+  font-weight: 500;
+}
+
+.mission-detail-status {
+  margin: 20px 0 0 56px;
+  color: #8f8f8f;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+
+.mission-detail-body {
+  margin: 28px 0 0 56px;
+  max-width: 980px;
+  color: #d2d2d2;
+  font-size: clamp(15px, 1.25vw, 19px);
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+/* Give the reply frame equal breathing room on both sides. */
+.support-reply-fullscreen {
+  width: calc(100vw - 36px);
+  margin-left: -22px;
+  margin-right: 0;
+}
+
+@media (max-width: 1100px) {
+  .support-reply-fullscreen {
+    margin-left: -10px;
+  }
+}
+
+@media (max-width: 780px) {
+  .mission-empty {
+    min-height: 240px;
+  }
+
+  .mission-detail-body,
+  .mission-detail-status {
+    margin-left: 0;
+  }
+
+  .support-reply-fullscreen {
+    width: calc(100vw - 28px);
+    margin-left: -6px;
+    margin-right: 0;
   }
 }
